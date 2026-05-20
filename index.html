@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREATE AND EXPLORE</title>
+    
+    <link rel="icon" type="image/png" href="MULTIMEDIA/icon.gif">
+
+    <style>
+        /* ESTILO INSPIRADO EN YZY / APEX TWIN AESTHETIC */
+        :root {
+            --bg-color: #f6f6f6;
+            --text-color: #1a1a1a;
+            --accent-color: #777777;
+            --border-color: #e0e0e0;
+            --font-size-base: 1.1rem;
+            --transition-speed: 0.4s;
+            
+            /* Colores Ventana Mac */
+            --mac-close: #ff5f56;
+            --mac-minimize: #ffbd2e;
+            --mac-maximize: #27c93f;
+            --mac-header-bg: #ececec;
+        }
+
+        body.dark-mode {
+            --bg-color: #111111;
+            --text-color: #f6f6f6;
+            --accent-color: #999999;
+            --border-color: #2a2a2a;
+            --mac-header-bg: #1a1a1a;
+        }
+
+        body.reduced-motion * {
+            transition: none !important;
+            animation: none !important;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: "Times New Roman", Times, serif;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        /* MAC WINDOW WRAPPER */
+        .mac-window {
+            width: 100%;
+            max-width: 700px;
+            background-color: var(--bg-color);
+            border: 1px solid var(--text-color);
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            opacity: 1;
+            transform: scale(1);
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease, opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        /* Cuando el botón rojo cierra la ventana */
+        .mac-window.closed {
+            opacity: 0;
+            transform: scale(0.95);
+            pointer-events: none;
+            display: none;
+        }
+
+        /* Barra superior de Mac */
+        .mac-header {
+            background-color: var(--mac-header-bg);
+            border-bottom: 1px solid var(--text-color);
+            height: 35px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            position: relative;
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+
+        .mac-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mac-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 0.5px solid rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+        }
+
+        .mac-dot.close { background-color: var(--mac-close); }
+        .mac-dot.minimize { background-color: var(--mac-minimize); }
+        .mac-dot.maximize { background-color: var(--mac-maximize); }
+
+        /* Contenedor central del Título e Icono */
+        .mac-title-container {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            pointer-events: none;
+        }
+
+        /* Estilo del icono al lado del nombre */
+        .mac-app-icon {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            display: inline-block;
+        }
+
+        .mac-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            white-space: nowrap;
+        }
+
+        /* Contenedor interno */
+        .window-content {
+            padding: 40px 30px;
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0, 1, 0, 1), padding 0.4s ease;
+        }
+
+        /* Cuando el botón amarillo minimiza el contenido */
+        .mac-window.minimized .window-content {
+            max-height: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        main {
+            width: 100%;
+            position: relative;
+        }
+
+        /* ENCABEZADO COMPACTO CON REPRODUCTOR INTEGRADO */
+        header {
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--text-color);
+            padding-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            width: 22px;
+            height: 14px;
+            padding: 0;
+            z-index: 1010;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 100%;
+            height: 1px;
+            background-color: var(--text-color);
+            transition: transform var(--transition-speed) ease, background-color var(--transition-speed) ease;
+        }
+
+        header h1 {
+            font-size: 1.3rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            line-height: 1;
+        }
+
+        /* REPRODUCTOR ULTRA-MINIMALISTA */
+        .discreet-player {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .player-info {
+            color: var(--accent-color);
+            white-space: nowrap;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-player {
+            background: none;
+            border: none;
+            color: var(--text-color);
+            font-family: "Times New Roman", Times, serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .btn-player:hover {
+            opacity: 0.5;
+        }
+
+        #live-clock {
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-color);
+            font-variant-numeric: tabular-nums;
+            line-height: 1;
+        }
+
+        /* SIDEBAR / CONFIGURACIONES (CORREGIDO) */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: -320px;
+            width: 320px;
+            height: 100%;
+            background-color: var(--bg-color);
+            border-right: 1px solid var(--text-color);
+            box-shadow: 20px 0 50px rgba(0,0,0,0.05);
+            z-index: 5000; /* Asegura quedar por encima de todo */
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 35px;
+            transition: left var(--transition-speed) cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        .sidebar.open {
+            left: 0;
+        }
+
+        .sidebar h2 {
+            font-size: 1.1rem;
+            font-weight: normal;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--accent-color);
+        }
+
+        .btn-option {
+            background: none;
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            font-family: "Times New Roman", Times, serif;
+            padding: 8px 12px;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-align: left;
+            transition: background var(--transition-speed) ease, color var(--transition-speed) ease;
+        }
+
+        .btn-option:hover, .btn-option.active {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        .volume-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            outline: none;
+            margin-top: 5px;
+        }
+
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            background: var(--text-color);
+            cursor: pointer;
+            border-radius: 50%;
+        }
+
+        .sidebar-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(1px);
+            z-index: 4999; /* Justo debajo del sidebar */
+        }
+
+        .sidebar-overlay.show {
+            display: block;
+        }
+
+        .logs-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .log-entry {
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .log-date {
+            width: 100%;
+            background: none;
+            border: none;
+            text-align: left;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 1.15rem;
+            padding: 20px 0;
+            cursor: pointer;
+            color: var(--text-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: opacity 0.2s ease;
+        }
+
+        .log-date:hover {
+            opacity: 0.5;
+        }
+
+        .log-date::after {
+            content: "[+]";
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            font-variant-numeric: tabular-nums;
+        }
+
+        .log-entry.active .log-date::after {
+            content: "[-]";
+        }
+
+        .log-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-speed) cubic-bezier(0, 1, 0, 1), padding var(--transition-speed) ease;
+            font-size: var(--font-size-base);
+            line-height: 1.6;
+            color: var(--text-color);
+            text-align: justify;
+            opacity: 0.9;
+        }
+
+        .log-entry.active .log-content {
+            max-height: 3000px;
+            padding-bottom: 35px;
+            transition: max-height var(--transition-speed) ease-in-out, padding var(--transition-speed) ease;
+        }
+
+        .wiki-link {
+            font-weight: bold;
+            color: var(--text-color);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+            text-decoration-thickness: 1px;
+            cursor: pointer;
+            background-color: rgba(0,0,0,0.03);
+            padding: 0 4px;
+            transition: background-color 0.2s ease;
+        }
+
+        body.dark-mode .wiki-link {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        /* CONTENEDOR FLOTANTE PEQUEÑO (HOVER) */
+        #media-preview-container {
+            position: fixed;
+            pointer-events: none;
+            display: none;
+            z-index: 6000;
+            width: 240px;
+            height: 160px;
+            background-color: rgba(0,0,0,0.05);
+            border: 1px solid var(--text-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        #media-preview-container img, #media-preview-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* MODAL GIGANTE DE AMPLIACIÓN (CLICK) */
+        #media-lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            cursor: zoom-out;
+        }
+
+        #media-lightbox .lightbox-content {
+            max-width: 85%;
+            max-height: 85%;
+            border: 1px solid #ffffff;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            background-color: #000;
+        }
+
+        #media-lightbox img, #media-lightbox video {
+            display: block;
+            max-width: 100%;
+            max-height: 80vh;
+            object-fit: contain;
+        }
+
+        /* Botón de reapertura discreto */
+        #reopen-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: none;
+            border: 1px solid var(--text-color);
+            color: var(--text-color);
+            padding: 8px 14px;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: none;
+            z-index: 999;
+        }
+        #reopen-btn:hover {
+            background-color: var(--text-color);
+            color: var(--bg-color);
+        }
+
+        /* BOTÓN MINIMALISTA INSTAGRAM EN LA ESQUINA INFERIOR IZQUIERDA */
+        .instagram-fixed-btn {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-family: "Times New Roman", Times, serif;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+            text-decoration: none;
+            border-bottom: 1px transparent dashed;
+            transition: color 0.3s ease, border-color 0.3s ease;
+            z-index: 4000;
+        }
+        .instagram-fixed-btn:hover {
+            color: var(--text-color);
+            border-color: var(--text-color);
+        }
+
+        /* SOPORTE REVISADO PANTALLA COMPLETA */
+        .mac-window:-webkit-full-screen {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
+            padding: 40px;
+            background-color: var(--bg-color);
+            overflow-y: auto;
+        }
+        .mac-window:fullscreen {
+            width: 100% !important;
+            max-width: 100% !important;
+            height: 100% !important;
+            padding: 40px;
+            background-color: var(--bg-color);
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- El Sidebar y su Overlay ahora están fuera del flujo del contenedor Mac para evitar bugs de recorte -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    
+    <aside class="sidebar" id="sidebar">
+        <div>
+            <h2>ACCESIBILIDAD</h2>
+            <div class="control-group" style="margin-top: 15px;">
+                <span class="control-label">Visualización</span>
+                <button class="btn-option" id="themeToggle">Modo Oscuro</button>
+                <span class="control-label" style="margin-top: 10px;">Tamaño de Fuente</span>
+                <button class="btn-option" id="fontSizeToggle">Aumentar Texto</button>
+                <span class="control-label" style="margin-top: 10px;">Rendimiento</span>
+                <button class="btn-option" id="motionToggle">Reducir Animaciones</button>
+            </div>
+        </div>
+
+        <div>
+            <h2>AUDIO / AMBIENT</h2>
+            <div class="control-group" style="margin-top: 15px;">
+                <span class="control-label">Volumen Master</span>
+                <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.40">
+                <button class="btn-option" id="muteToggle" style="margin-top: 10px;">Mutear</button>
+            </div>
+        </div>
+    </aside>
+
+    <audio id="localAudio"></audio>
+
+    <div id="media-preview-container"></div>
+
+    <div id="media-lightbox">
+        <div class="lightbox-content" id="lightboxContent"></div>
+    </div>
+
+    <button id="reopen-btn">[REOPEN ARCHIVE]</button>
+
+    <!-- ENLACE MINIMALISTA AL INSTAGRAM DE TAKORO -->
+    <a href="https://www.instagram.com/istakoro" target="_blank" class="instagram-fixed-btn">[TAKORO ARCHIVE INSTAGRAM]</a>
+
+    <div class="mac-window" id="macWindow">
+        
+        <div class="mac-header">
+            <div class="mac-buttons">
+                <div class="mac-dot close" id="macCloseBtn" title="Cerrar pestaña"></div>
+                <div class="mac-dot minimize" id="macMinimizeBtn" title="Minimizar contenido"></div>
+                <div class="mac-dot maximize" id="macMaximizeBtn" title="Pantalla completa"></div>
+            </div>
+            
+            <div class="mac-title-container">
+                <img src="MULTIMEDIA/icon.gif" alt="" class="mac-app-icon">
+                <div class="mac-title">CREATE AND EXPLORE</div>
+            </div>
+        </div>
+
+        <div class="window-content">
+            <main>
+                <header>
+                    <div class="header-left">
+                        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de accesibilidad">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        <h1>ARCHIVE</h1>
+
+                        <div class="discreet-player">
+                            <div class="player-controls">
+                                <button class="btn-player" id="btnPlay">[PLAY]</button>
+                                <button class="btn-player" id="btnPause">[PAUSE]</button>
+                                <button class="btn-player" id="btnNext">[RANDOM]</button>
+                                <button class="btn-player" id="btnFullscreen">[FULLSCREEN]</button>
+                            </div>
+                            <div class="player-info" id="playerTrackInfo">OFF</div>
+                        </div>
+                    </div>
+                    
+                    <div id="live-clock">Cargando...</div>
+                </header>
+
+                <div class="logs-container">
+                    
+                    <div class="log-entry">
+                        <button class="log-date">20 MARZO 2026</button>
+                        <div class="log-content">
+                            <p>Hoy en mi cumpleaños numero 20 lanzo oficialmente mi EP doble <span class="wiki-link" data-type="image" data-src="MULTIMEDIA/2.jpeg"><u><strong>SIMON</strong></u></span>, un proyecto sónico e introspectivo que comencé a maquetar en secreto desde el 2023. <em>Simon</em> es un manifiesto de arte ambiental que me representa directamente; evoca a mi "yo pequeño", alguien sumamente tímido y de pocas palabras, pero también rinde homenaje directo a Simón, el perro que más quiero en este universo.</p>
+                            <br>
+                            <p>Siempre he creído que los animales son los seres vivos más puros, leales y genuinos que existen; ellos no tienen la capacidad de hablar, y es precisamente por eso que decidí que este álbum fuera enteramente <strong>ambient, orgánico y libre de letras</strong>. La música habla por su silencio. Estructuralmente, la v2 is la entrega más cohesiva, sólida y madura del proyecto, diseñada con un inicio cíclico que se conecta de forma milimétrica con el desenlace del último track.</p>
+                            <br>
+                            <p>A nivel de texturas, el sonido muta constantemente a través de complejas capas de <em>Drum and Bass (DnB), Pop deconstruido, Jungle abrasivo, Ambient estático y EDM atmosférico</em>. Todo el espectro rítmico está profundamente influenciado por las complejas frecuencias y legados artísticos de <strong>Aphex Twin, Frank Ocean, Cocteau Twins, Yung Lean y Radiohead</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">18 MAYO 2026</button>
+                        <div class="log-content">
+                            <p>Este espacio es un archivo vivo concebido por <span class="wiki-link" data-type="image" data-src="MULTIMEDIA/1.jpg">Juan Acosta</span>, también conocido en este rincón digital como <em>takoro</em>. Está diseñado para aquellos espíritus curiosos que buscan perderse y encontrar inspiración en las infinitas capas de las diferentes culturas, la música, el arte, la literatura, la naturaleza, el cine y la fotografía.</p>
+                            <br>
+                            <p>Al mismo tiempo, funciona como mi propio manifiesto y escape mental; un lienzo en blanco donde me permito estructurar el caos de mis pensamientos, capturar ideas efímeras, resguardar poemas inacabados o simplemente redactar mis dudas existenciales. Bienvenido a este rincón de introspección.</p>
+                        </div>
+                    </div>
+
+                    <!-- ÚLTIMA FECHA: COLOCA TUS LINKS EN LOS ATRIBUTOS data-src -->
+                    <div class="log-entry">
+                        <button class="log-date">19 MAYO 2026</button>
+                        <div class="log-content">
+                            <p>Frecuentemente nos enfrentamos al abismo del 
+                                <!-- Ejemplo con link de imagen de internet externa -->
+                                <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/5f/ae/e2/5faee2f9daeb0fcb45fdce440d20efa8.jpg">existencialismo puro</span>, 
+                                esa incómoda e inevitable condición donde el ser humano se descubre a sí mismo desprovisto de un manual preestablecido. Frente a la inmensidad del cosmos, la búsqueda de un 
+                                <!-- Cambia la URL de ejemplo de abajo por el link que quieras -->
+                                <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/2e/c6/ea/2ec6ea8a6c8221860fcf83e1645015de.jpg">propósito de vivir</span> 
+                                no es un camino que se encuentra ya trazado, sino una arquitectura íntima que se debe esculpir día con día a través de nuestras decisiones y pasiones.</p>
+                            <br>
+                            <p>El dolor, la belleza, el silencio y la creación artística son herramientas con las que intentamos dotar de orden al caos imperante de la 
+                                <span class="wiki-link" data-type="gifi" data-src="https://i.pinimg.com/originals/2c/45/a3/2c45a3e9838d4dc860a746a4c91b4664.gif">experiencia humana</span>. No se trata de hallar un significado universal oculto bajo las piedras, sino de abrazar la libertad absoluta de existir y reclamar nuestro propio destino en este breve destello de consciencia.</p>
+                        </div>
+                    </div>
+                    <div class="log-entry">
+                        <button class="log-date">19 MAYO 2026</button>
+                        <div class="log-content">
+                            <p>Eventualmente nos vemos alienados por la sobresaturacion de informacion que absorbemos de cualquier fuente de conocimiento ultimamente me he venido siento muy fatigo al ser bombardeado por la sobre estimulacion de medios digitales co n algoritmos perfectamente diseñados para engancharnos durante horas a contendos que nos interesen ya sea por puro entretenimiento como para inspiracion,
+                                la sociedad esta conformada por masas en constantemente evolucion y estado de creatividad pero me suelo preguntar ¿existira algun tipo de limite en la mente humana a la hora de diseñar y crear?.
+                            </p>
+                            <br>
+                            <p>Los directores creativos tienen demasaidos bloqueos mentales como cualquier persona normal, tu desde tu cuarto podrias cambiar el mudo con tu creatividad con cosas basicas, cuando la sobresaturacion de los medios afecta nuestra vision, la mejor opcion es desconectarte e irte a convivir con la naturaleza, sin señal y sin ruido, solo tu y tu libreta, busca la <span class="wiki-link" data-type="gifi" data-src="https://i.pinimg.com/originals/2c/45/a3/2c45a3e9838d4dc860a746a4c91b4664.gif">belleza en cosas simples</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('localAudio');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const muteToggle = document.getElementById('muteToggle');
+        
+        const btnPlay = document.getElementById('btnPlay');
+        const btnPause = document.getElementById('btnPause');
+        const btnNext = document.getElementById('btnNext');
+        const playerTrackInfo = document.getElementById('playerTrackInfo');
+
+        audio.volume = 0.40;
+        let indiceActual = -1; 
+
+        const listaCanciones = [
+            { archivo: "AUDIO/ambient.m4a", texto: "#3 - Aphex Twin" },
+            { archivo: "AUDIO/ambient2.opus", texto: "Village of Dali - Final Fantasy IX" },
+            { archivo: "AUDIO/ambient3.m4a", texto: "BÓ - Ralphie Choo" },
+            { archivo: "AUDIO/ambient4.MP3", texto: "#2 - takoro" },
+            { archivo: "AUDIO/ambient5.m4a", texto: "Forest - Akira Yamaoka" },
+            { archivo: "AUDIO/ambient6.opus", texto: "URL湖 - Webinar" },
+            { archivo: "AUDIO/ambient7.m4a", texto: "Online Office -  猫 シ Corp" },
+            { archivo: "AUDIO/ambient8.m4a", texto: "Bonus fruit || - DreamCorp" }
+        ];
+
+        function cargarCancion(index) {
+            indiceActual = index;
+            const cancion = listaCanciones[indiceActual];
+            audio.src = cancion.archivo;
+            playerTrackInfo.innerText = cancion.texto;
+            audio.load();
+        }
+
+        function playAudio() {
+            audio.play().then(() => {
+            }).catch(err => {
+                console.error("Error al reproducir archivo:", err);
+                reproducirRandom(); 
+            });
+        }
+
+        function pausaAudio() {
+            audio.pause();
+        }
+
+        function reproducirRandom() {
+            if (listaCanciones.length <= 1) {
+                cargarCancion(0);
+            } else {
+                let nuevoIndice;
+                do {
+                    nuevoIndice = Math.floor(Math.random() * listaCanciones.length);
+                } while (nuevoIndice === indiceActual);
+                
+                cargarCancion(nuevoIndice);
+            }
+            playAudio();
+        }
+
+        btnPlay.addEventListener('click', () => {
+            if (indiceActual === -1) {
+                reproducirRandom();
+            } else {
+                playAudio();
+            }
+        });
+
+        btnPause.addEventListener('click', pausaAudio);
+        btnNext.addEventListener('click', reproducirRandom);
+        audio.addEventListener('ended', reproducirRandom);
+
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+            if(audio.muted && e.target.value > 0) {
+                audio.muted = false;
+                muteToggle.innerText = "Mutear";
+                muteToggle.classList.remove('active');
+            }
+        });
+
+        muteToggle.addEventListener('click', () => {
+            audio.muted = !audio.muted;
+            if (audio.muted) {
+                muteToggle.innerText = "Activar";
+                muteToggle.classList.add('active');
+            } else {
+                muteToggle.innerText = "Desactivar musica ambiental";
+                muteToggle.classList.remove('active');
+            }
+        });
+
+        // LÓGICA DE BARRA LATERAL (REVISADA Y CORREGIDA SIN TRABAS)
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('show');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('show');
+        }
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (sidebar.classList.contains('open')) {
+                closeSidebar();
+            } else {
+                openSidebar();
+            }
+        });
+
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.classList.toggle('active');
+        });
+
+        const fontSizeToggle = document.getElementById('fontSizeToggle');
+        fontSizeToggle.addEventListener('click', () => {
+            const currentSize = getComputedStyle(document.documentElement).getPropertyValue('--font-size-base').trim();
+            if(currentSize === '1.1rem') {
+                document.documentElement.style.setProperty('--font-size-base', '1.35rem');
+                fontSizeToggle.innerText = "Texto Normal";
+                fontSizeToggle.classList.add('active');
+            } else {
+                document.documentElement.style.setProperty('--font-size-base', '1.1rem');
+                fontSizeToggle.innerText = "Aumentar Texto";
+                fontSizeToggle.classList.remove('active');
+            }
+        });
+
+        const motionToggle = document.getElementById('motionToggle');
+        motionToggle.addEventListener('click', () => {
+            document.body.classList.toggle('reduced-motion');
+            motionToggle.classList.toggle('active');
+            motionToggle.innerText = document.body.classList.contains('reduced-motion') ? "Animaciones: OFF" : "Reducir Animaciones";
+        });
+
+        function updateClock() {
+            const now = new Date();
+            const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
+            const dateString = now.toLocaleDateString('es-ES', dateOptions).toUpperCase();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('live-clock').innerText = `${dateString} — ${hours}:${minutes}:${seconds}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        document.querySelectorAll('.log-date').forEach(button => {
+            button.addEventListener('click', () => {
+                button.parentElement.classList.toggle('active');
+            });
+        });
+
+        /* CONTROL MULTIMEDIA (HOVER Y AMPLIACIÓN POR CLICK) */
+        const previewContainer = document.getElementById('media-preview-container');
+        const mediaLightbox = document.getElementById('media-lightbox');
+        const lightboxContent = document.getElementById('lightboxContent');
+
+        function initMediaEvents() {
+            document.querySelectorAll('.wiki-link').forEach(link => {
+                const src = link.getAttribute('data-src');
+                const type = link.getAttribute('data-type') || 'image';
+
+                link.addEventListener('mouseenter', (e) => {
+                    if (!src) return;
+                    previewContainer.innerHTML = '';
+
+                    if (type === 'video') {
+                        const videoEl = document.createElement('video');
+                        videoEl.src = src; videoEl.autoplay = true; videoEl.loop = true; videoEl.muted = true;
+                        previewContainer.appendChild(videoEl);
+                    } else {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = src;
+                        previewContainer.appendChild(imgEl);
+                    }
+                    previewContainer.style.display = 'block';
+                });
+
+                link.addEventListener('mousemove', (e) => {
+                    previewContainer.style.left = (e.clientX + 15) + 'px';
+                    previewContainer.style.top = (e.clientY + 15) + 'px';
+                });
+
+                link.addEventListener('mouseleave', () => {
+                    previewContainer.style.display = 'none';
+                    previewContainer.innerHTML = '';
+                });
+
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!src) return;
+                    
+                    lightboxContent.innerHTML = '';
+                    previewContainer.style.display = 'none'; 
+
+                    if (type === 'video') {
+                        const videoEl = document.createElement('video');
+                        videoEl.src = src; videoEl.controls = true; videoEl.autoplay = true; videoEl.loop = true;
+                        lightboxContent.appendChild(videoEl);
+                    } else {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = src;
+                        lightboxContent.appendChild(imgEl);
+                    }
+                    mediaLightbox.style.display = 'flex';
+                });
+            });
+        }
+        initMediaEvents();
+
+        mediaLightbox.addEventListener('click', () => {
+            mediaLightbox.style.display = 'none';
+        });
+
+        // Eventos ventana Mac de adorno / funcionales básicos
+        document.getElementById('macCloseBtn').addEventListener('click', () => {
+            document.getElementById('macWindow').classList.add('closed');
+            document.getElementById('reopen-btn').style.display = 'block';
+        });
+        document.getElementById('reopen-btn').addEventListener('click', () => {
+            document.getElementById('macWindow').classList.remove('closed');
+            document.getElementById('reopen-btn').style.display = 'none';
+        });
+        document.getElementById('macMinimizeBtn').addEventListener('click', () => {
+            document.getElementById('macWindow').classList.toggle('minimized');
+        });
+        
+        // Fullscreen nativo corregido
+        const btnFullscreen = document.getElementById('btnFullscreen');
+        const maxBtn = document.getElementById('macMaximizeBtn');
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.getElementById('macWindow').requestFullscreen().catch(err => {
+                    alert(`Error al intentar modo pantalla completa: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        btnFullscreen.addEventListener('click', toggleFullscreen);
+        maxBtn.addEventListener('click', toggleFullscreen);
+    </script>
+</body>
+</html>
