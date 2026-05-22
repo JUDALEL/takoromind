@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CREATE AND EXPLORE</title>
+    
+    <link class="icon" type="image/png" href="MULTIMEDIA/icon.gif">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <audio id="localAudio" preload="none"></audio>
+
+    <button id="reopen-btn">[ABRIR ARCHIVO]</button>
+
+    <div class="mac-window" id="macWindow">
+        
+        <div class="sidebar-overlay" id="sidebarOverlay"></div>
+        
+        <aside class="sidebar" id="sidebar">
+            <div>
+                <h2>ACCESIBILIDAD</h2>
+                <div class="control-group" style="margin-top: 15px;">
+                    <span class="control-label">Visualización</span>
+                    <button class="btn-option" id="themeToggle">Modo Oscuro</button>
+                    <button class="btn-option" id="layoutSizeToggle">Agrandar Ventana</button>
+                    <span class="control-label" style="margin-top: 10px;">Tamaño de Fuente</span>
+                    <button class="btn-option" id="fontSizeToggle">Texto Grande</button>
+                    <span class="control-label" style="margin-top: 10px;">Rendimiento</span>
+                    <button class="btn-option" id="motionToggle">Reducir Animaciones</button>
+                </div>
+            </div>
+
+            <div>
+                <h2>AUDIO / AMBIENT</h2>
+                <div class="control-group" style="margin-top: 15px;">
+                    <span class="control-label">Volumen Master</span>
+                    <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.40">
+                    <button class="btn-option" id="muteToggle" style="margin-top: 10px;">Mutear</button>
+                </div>
+            </div>
+        </aside>
+
+        <div id="media-preview-container"></div>
+
+        <div id="media-lightbox">
+            <div class="lightbox-content" id="lightboxContent"></div>
+        </div>
+
+        <a href="https://www.instagram.com/istakoro" target="_blank" class="instagram-fixed-btn">[TAKORO ARCHIVE INSTAGRAM]</a>
+
+        <div class="mac-header">
+            <div class="mac-buttons">
+                <div class="mac-dot close" id="macCloseBtn" title="Cerrar pestaña"></div>
+                <div class="mac-dot minimize" id="macMinimizeBtn" title="Minimizar contenido"></div>
+                <div class="mac-dot maximize" id="macMaximizeBtn" title="Pantalla completa"></div>
+            </div>
+            
+            <div class="mac-title-container">
+                <img src="MULTIMEDIA/icon.gif" alt="Icono" class="mac-app-icon" id="macAppIcon" title="Visualizar icono" loading="lazy">
+                <div class="mac-title">CREATE AND EXPLORE</div>
+            </div>
+        </div>
+
+        <div class="window-content">
+            <main>
+                <header>
+                    <div class="header-left">
+                        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú de accesibilidad">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </button>
+                        <h1>ARCHIVE</h1>
+
+                        <div class="integrated-player">
+                            <div class="player-disc-area">
+                                <div class="mini-vinyl" id="vinylDisc">
+                                    <div class="vinyl-lines"></div>
+                                    <div class="vinyl-center" id="vinylCenter"></div>
+                                </div>
+                            </div>
+                            <div class="player-core">
+                                <div class="player-track-title" id="playerTrackInfo">SISTEMA APAGADO</div>
+                                <div class="player-controls-row">
+                                    <button class="btn-player-ctrl" id="btnPrev" title="Anterior">⏮</button>
+                                    <button class="btn-player-ctrl" id="btnPlayPause" title="Play / Pausa">▶</button>
+                                    <button class="btn-player-ctrl" id="btnNext" title="Aleatorio">⏭</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="header-right">
+                        <button id="btnLanguage" class="mac-menu-btn" title="Cambiar Idioma / Change Language" data-lang="es">
+                            <img src="MULTIMEDIA/icon.gif" alt="Idioma" class="mac-btn-icon"> <span class="lang-label">ES</span>
+                        </button>
+                        <button id="btnFullscreen" class="standalone-fullscreen" title="Modo Pantalla Completa">[PANTALLA COMPLETA]</button>
+                        <div id="live-clock">Cargando...</div>
+                    </div>
+                </header>
+
+                <div class="logs-container">
+                    
+                    <div class="log-entry">
+                        <button class="log-date">20 MARZO 2026</button>
+                        <div class="log-content">
+                            <p data-en="Today on my 20th birthday, I officially launch my double EP SIMON, a sonic and introspective project that I began mapping out in secret since 2023. simon is an ambient art manifesto that represents me directly; it evokes my 'younger self', someone extremely timid and of few words, but also pays direct tribute to Simón, the dog I love most in this universe.">Hoy en mi cumpleaños numero 20 lanzo oficialmente mi EP doble <span class="wiki-link" data-type="image" data-src="MULTIMEDIA/2.jpeg"><u><strong>SIMON</strong></u></span>, un proyecto sónico e introspectivo que comencé a maquetar en secreto desde el 2023. <em><a href="https://youtu.be/5BHW7BXSYUM?si=59xAZ34lfmy6BI-V" target="_blank"><u><strong>simon</strong></u></a></em> es un manifesto de arte ambiental que me representa directamente; evoca a mi "yo pequeño", alguien sumamente tímido y de pocas palabras, pero también rinde homenaje directo a Simón, el perro que más quiero en este universo.</p>
+                            <br>
+                            <p data-en="I have always believed that animals are the purest, most loyal and genuine living beings that exist; they do not have the ability to speak, and that is precisely why I decided that this album should be entirely ambient, organic and lyrics-free. Music speaks through its silence. Structurally, simon v2 is the most cohesive, solid and mature release of the project, designed with a cyclical beginning that seamlessly connects with the resolution of the last track.">Siempre he creído que los animales son los seres vivos más puros, leales y genuinos que existen; ellos no tienen la capacidad de hablar, y es precisamente por eso que decidí que este álbum fuera enteramente <strong>ambient, orgánico y libre de letras</strong>. La música habla por su silencio. Estructuralmente, <em><a href="https://youtu.be/vNENpxIKzzQ?si=AuNdThpSy6Mg3EG5" target="_blank"><u><strong>simon v2</strong></u></a></em>  es la entrega más cohesiva, sólida y madura del proyecto, diseñada con un inicio cíclico que se conecta de forma milimétrica con el desenlace del último track.</p>
+                            <br>
+                            <p data-en="At a textural level, the sound constantly mutates through complex layers of Drum and Bass (DnB), deconstructed Pop, abrasive Jungle, static Ambient and atmospheric EDM. The entire rhythmic spectrum is deeply influenced by the complex frequencies and artistic legacies of Aphex Twin, Frank Ocean, Cocteau Twins, Yung Lean and Radiohead.">A nivel de texturas, el sonido muta constantemente a través de complejas capas de <em>Drum and Bass (DnB), Pop deconstruido, Jungle abrasivo, Ambient estático y EDM atmosférico</em>. Todo el espectro rítmico está profundamente influenciado por las complejas frecuencias y legados artísticos de <strong>Aphex Twin, Frank Ocean, Cocteau Twins, Yung Lean y Radiohead</strong>.</p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">18 MAYO 2026</button>
+                        <div class="log-content">
+                            <p data-en="This space is a living archive conceived by Juan Acosta, also known in this digital corner as takoro. It is designed for those curious spirits looking to lose themselves and find inspiration in the infinite layers of different cultures, music, art, literature, nature, cinema and photography.">Este espacio es un archivo vivo concebido por <span class="wiki-link" data-type="image" data-src="MULTIMEDIA/1.jpg"><u><strong>Juan Acosta</strong></u></span>, también conocido en este rincón digital como <em>takoro</em>. Está diseñado para aquellos espíritus curiosos que buscan perderse y encontrar inspiración en las infinitas capas de las diferentes culturas, la música, el arte, la literatura, la naturaleza, el cine y la fotografía.</p>
+                            <br>
+                            <p data-en="At the same time, it functions as my own manifesto and mental escape; a blank canvas where I allow myself to structure the chaos of my thoughts, capture fleeting ideas, safeguard unfinished poems or simply write down my existential doubts. Welcome to this corner of introspection.">Al mismo tiempo, funciona como mi propio manifiesto y escape mental; un lienzo en blanco donde me permito de estructurar el caos de mis pensamientos, capturar ideas efímeras, resguardar poemas inacabados o simplemente redactar mis dudas existenciales. Bienvenido a este rincón de introspección.</p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">19 MAYO 2026</button>
+                        <div class="log-content">
+                            <p data-en="We frequently face the abyss of pure existentialism, that uncomfortable and inevitable condition where the human being discovers himself stripped of a pre-established manual. Facing the immensity of the cosmos, the search for a purpose of living is not a path that is already traced, but an intimate architecture that must be sculpted day by day through our choices and passions.">Frecuentemente nos enfrentamos al abismo del <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/5f/ae/e2/5faee2f9daeb0fcb45fdce440d20efa8.jpg"><u><strong>existencialismo puro</strong></u></span>, esa incómoda e inevitable condición donde el ser humano se descubre a sí mismo desprovisto de un manual preestablecido. Frente a la inmensidad del cosmos, la búsqueda de un <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/2e/c6/ea/2ec6ea8a6c8221860fcf83e1645015de.jpg"><u><strong>propósito de vivir</strong></u></span> no es un camino que se encuentra ya trazado, sino una arquitectura íntima que se debe esculpir día con día a través de nuestras decisiones y pasiones.</p>
+                            <br>
+                            <p data-en="Pain, beauty, silence and artistic creation are tools with which we try to bring order to the prevailing chaos of the human experience. It is not about finding a universal meaning hidden under the stones, but about embracing the absolute freedom of existing and claiming our own destiny in this brief flash of consciousness.">El dolor, la belleza, el silencio y la creación artística son herramientas con las que intentamos dotar de orden al caos imperante de la <span class="wiki-link" data-type="gif" data-src="https://i.pinimg.com/originals/3c/54/d3/3c54d3a5519eda79991a818b75841889.gif"><u><strong>experiencia humana</strong></u></span>. No se trata de hallar un significado universal oculto bajo las piedras, sino de abrazar la libertad absoluta de existir y reclamar nuestro propio destino en este breve destello de consciencia.</p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">19 MAYO 2026</button>
+                        <div class="log-content">
+                            <p data-en="Eventually we face the abyss of pure existentialism, that uncomfortable and inevitable condition where the human being discovers himself stripped of a pre-established manual.">Eventualmente nos vemos alienados por la sobresaturacion de informacion que absorbemos de cualquier fuente de conocimiento ultimamente me he venido siento muy fatigo al ser bombardeado por la sobre estimulacion de medios digitales co n algoritmos perfectamente diseñados para engancharnos durante hours a contendos que nos interesen ya sea por puro entretenimiento como para inspiracion, la sociedad esta conformada por masas en constantemente evolucion y estado de creatividad pero me suelo preguntar ¿existira algun tipo de limite en la mente humana a la hora de diseñar y crear?.</p>
+                            <br>
+                            <p data-en="Creative directors have too many mental blocks like any normal person. You, from your room, could change the world with your creativity using basic things. When the oversaturation of media affects our vision, the best option is to disconnect and go coexist with nature, without a signal and without noise, just you and your notebook. Seek beauty in simple things.">Los directores creativos tienen demasaidos bloqueos mentales como cualquier persona normal, tu desde tu cuarto podrias cambiar el mudo con tu creatividad con cosas basicas, cuando la sobresaturacion de los medios afecta nuestra vision, la mejor opcion es desconectarte e irte a convivir con la naturaleza, sin señal and sin ruido, solo tu y tu libreta, busca la <span class="wiki-link" data-type="gif" data-src="https://i.pinimg.com/originals/2c/45/a3/2c45a3e9838d4dc860a746a4c91b4664.gif"><u><strong>belleza en cosas simples</strong></u></span></p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">20 MAYO 2026 — INTROSPECCIÓN</button>
+                        <div class="log-content">
+                            <p data-en="It is overwhelming to observe the architecture of modern everyday life. We slice ourselves sharply into two spectrums of the same existential neurosis. On one hand, I see the vast majority trapped in the relentless pursuit of money, not out of greed, but out of the raw need to survive; a violent transaction where vital time is traded for the basic right to subsist one more month under a roof and with a plate on the table.">Resulta abrumador observar la arquitectura de la cotidianidad moderna. Nos dividimos de manera tajante en dos espectros de una misma neurosis existencial. Por un lado, veo la inmensia mayoría atrapada en la persecución incansable del dinero, no por avaricia, sino por la cruda necesidad de <strong>sobrevivir</strong>; una transacción violenta donde se cambia tiempo vital por el derecho básico a subsistir un mes más bajo un techo y con un plato en la mesa.</p>
+                            <br>
+                            <p data-en="On the other hand, the reverse of the coin coexists: those who have completely conquered the peak of material security but inhabit emotional deserts. They pursue an abstract idea of happiness trying to bury abyssal existential voids with layers of sterile consumption, hyperstimulation, and possessions. At the end of the day, money only buys a truce with the environment, but never a pact with internal silence. Both sides run on an infinite treadmill; some fleeing from lack, others from their own emptiness.">Por otro lado, coexiste el reverso de la moneda: aquellos que han conquistado por completo la cima de la seguridad material, pero habitan desiertos emocionales. Persiguen una idea abstracta de felicidad intentando sepultar abisales <strong>vacíos existenciales</strong> con capas de consumo estéril, hiperestimulación and posesiones. Al final del día, el dinero solo compra una tregua con el entorno, pero jamás un pacto con el silencio interno. Ambos lados corren en una cinta de correr infinita; unos huyendo de la carencia, otros de su propia vacuidad.</p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">20 MAYO 2026 — DIRECCIÓN CREATIVA</button>
+                        <div class="log-content">
+                            <p data-en="A true album rollout is not born from a strategic digital marketing plan; it originates from the decoding of a very deep obsession or abstract feeling. To orchestrate a campaign that transcends, the initial thought must focus on building a container universe. It's not about releasing loose songs, but about building a mythology where visual aesthetics and sound palette share exactly the same DNA. Designing this cohesion implies translating frequencies into visual textures (for example, analog distortion converted into cinematic grain or brutalist typographies).">Un verdadero <strong>rollout de un álbum</strong> no nace de un plan estratégico de marketing digital; se origina desde la decodificación de una obsesión o un sentiment abstracto muy profundo. Para actuar una campaña que trascienda, el pensamiento inicial debe centrarse en construir un universo contenedor. No se trata de lanzar canciones sueltas, sino de edificar una mitología donde la estética visual y la paleta sonora compartan exactamente el mismo ADN. Diseñar esta cohesión implica traducir frecuencias a texturas visuales (por ejemplo, la distorsión analógica convertida en grano cinematográfico o tipografías brutistas).</p>
+                            <br>
+                            <p data-en="Outside of the usual massive or commercial circles, radical minds exist in their methods of inspiration. An impeccable example is the British producer Burial, who modeled his legendary sonic signature not in professional studios, but walking alone through the night suburbs of London under torrential rains, capturing the echo of distant raves, ambient sounds of bus stops, and sampling distorted audios from video game soundtracks like Metal Gear Solid to evoke a ghostly nostalgia and an absolute anonymity.">Fuera de los círculos masivos o comerciales de siempre, existen mentes radicales en sus métodos de inspiración. Un ejemplo impecable es el productor británico <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/d9/46/13/d946136de6a3a10ecdc7d04396cbbcfe.jpg"><u><strong>Burial</strong></u></span>, quien modeló su legendaria firma sónica no en estudios profesionales, sino caminando solo por los suburbios nocturnos de Londres bajo lluvias torrenciales, capturando el eco de raves lejanas, sonidos ambientales de paradas de autobús y sampleando audios distorsionados de bandas sonoras de videojuegos como <em>Metal Gear Solid</em> para evocar una nostalgia fantasmal y un anonimato absoluto.</p>
+                            <br>
+                            <p data-en="Another brilliant case of aesthetic subversion is Dean Blunt. His creative deployments are based on mystery, cultural trolling and the total stripping away of overexposure. Blunt usually starts projects by releasing cryptic download links in dark forums, using totally decontextualized archive images or putting on art exhibitions consisting of a single blank square, forcing the listener to actively search for the music. His inspiration comes from sabotaging industry expectations, creating a lo-fi, fragmented and deeply enigmatic aesthetic that turns the act of listening into an underground research experience.">Otro caso brillante de subversión estética es <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/b3/51/99/b35199f589a16c8250fa2e8a7cb1d5ab.jpg"><u><strong>Dean Blunt</strong></u></span>. Sus despliegues creativos se basan en el misterio, el troleo cultural y el desojo total de la sobreexposición. Blunt suele iniciar proyectos liberando enlaces crípticos de descarga en foros oscuros, utilizando imágenes de archivo totalmente descontextualizadas o montando exposiciones de arte que consisten en un solo recuadro en blanco, forzando al oyente a buscar la música de manera activa. Su inspiración proviene del sabotaje de las expectativas de la industria, creando una estética lo-fi, fragmented y profundamente enigmática que convierte el acto de escuchar en una experiencia de investigación subterránea.</p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">21 MAYO 2026</button>
+                        <div class="log-content">
+                            <p>
+                                <span class="wiki-link" data-type="image" data-src="https://media.pitchfork.com/photos/6a021f7e11d4b5e1620c60b2/master/w_1600%2Cc_limit/Fakemink-Terrified.jpg">
+                                    <img src="https://media.pitchfork.com/photos/6a021f7e11d4b5e1620c60b2/master/w_1600%2Cc_limit/Fakemink-Terrified.jpg" style="float: center; margin-right: 20px; margin-bottom: 20px;" width="150" height="150" alt="Fakemink - Terrified" loading="lazy">
+                                </span>
+                            </p>
+                            <p data-en="Fakemink has recently become one of my greatest sources of creativity and inspiration. At just 21 years old, this rapper and producer from London has managed to revolutionize underground hip-hop with a nostalgic, ethereal and utopian sound that evokes the golden era of lost demos on SoundCloud, but elevated to an impressive level of sound design."> <a href="https://www.instagram.com/fakemink/" target="_blank"><u><strong>Fakemink</strong></u></a> se ha convertido últimamente en una de mis más grandes fuentes de creatividad e inspiración. Con solo 21 años (nacido el 29 de enero de 2005 como Vincenzo Nischal Camille Bhatia), este rapero y productor originario de Londres ha logrado revolucionar el hip-hop underground con un sonido nostálgico, etéreo y utópico que evoca la época dorada de las demos perdidas y los archivos malditos de SoundCloud, pero elevado a un nivel de diseño sonoro impresionante que lo ha coronado en medios como <em>New Wave Magazine</em> como 'el nuevo príncipe de la nostalgia digital'.</p>
+                            <br>
+                            <p data-en="His proposal is purely experimental; it destroys generic trap structures to build dense and textured atmospheres based on a cloud rap revival. One of his most brutal features is the use of unpredictable and hyper-fragmented samples, with strong influences from artists like Dean Blunt, Imogen Heap or Kanye West.">Su propuesta es puramente experimental; destruye las estructuras genéricas del trap para construir atmósferas densas y texturizadas basadas en un revival del cloud rap. Uno de sus rasgos más brutales es el uso de samples impredecibles e hiperfragmentados—con marcadas influencias de artistas como Dean Blunt, Imogen Heap o Kanye West—, rescatando desde melodías oscuras y fragmentadas de bandas sonoras hasta frecuencias lo-fi aceleradas que flotan sobre líneas de bajo distorsionadas y percusiones abrasivas. De hecho, plataformas como <em>Pitchfork</em> han descrito su aclamado hit viral "Easter Pink" como una colisión perfecta donde el 'Bloghouse se encuentra con el cloud rap'.</p>
+                        </div>
+                    </div>
+
+                    <div class="log-entry">
+                        <button class="log-date">22 MAYO 2026 — INTROSPECCIÓN / DESCONEXIÓN</button>
+                        <div class="log-content">
+                            <p data-en="We live subjected to the invisible yoke of modern consumerism, a machinery designed to keep us dissatisfied. We should seriously consider the need to be a little more minimalist and disappear, even if temporarily or definitively, from any social network whose only real purpose is to encourage and constantly inject the virus of mass consumption participation.">Vivimos sometidos al yugo invisible del <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/94/e7/ad/94e7ada43f026b5b8400367208f3cf40.jpg"><u><strong>consumismo moderno</strong></u></span>, una maquinaria diseñada para mantenernos insatisfechos. Deberíamos plantearnos seriamente la necesidad de ser un poco más minimalistas y desaparecer, aunque sea de forma temporal o definitiva, de toda red social cuyo único propósito real sea incentivar e inyectar de manera constante el virus de la participación de consumo masivo.</p>
+                            <br>
+                            <p data-en="It is alarming to see how these applications meticulously devour our time and erode our mental health, forcing us to spend whole hours passively viewing an endless catalog of things we supposedly 'want' or 'need' to validate our existence. In the raw reality of the system, these represent luxuries and comforts that only privileged people can afford to have.">Es alarmante ver cómo estas aplicaciones devoran meticulosamente nuestro tiempo y erosionan nuestra salud mental, forzándonos a pasar hours enteras visualizando de manera pasiva un catálogo interminable de cosas que supuestamente "queremos" o "necesitamos" para validar nuestra existencia, pero que en la cruda realidad del sistema, representan lujos y comodidades que solo <span class="wiki-link" data-type="image" data-src="https://i1-c.pinimg.com/736x/2f/c6/2c/2fc62c749188bbadb39c0059cf139c73.jpg"><u><strong>personas privilegiadas</strong></u></span> pueden permitirse tener. Nos convierten en espectadores de vidas ajenas y artificiales, sembrando una envidia sistemática y una frustración silenciosa bajo el disfraz de la aspiración.</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const audio = document.getElementById('localAudio');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const muteToggle = document.getElementById('muteToggle');
+        
+        const btnPlayPause = document.getElementById('btnPlayPause');
+        const btnNext = document.getElementById('btnNext');
+        const btnPrev = document.getElementById('btnPrev');
+        const playerTrackInfo = document.getElementById('playerTrackInfo');
+        const vinylDisc = document.getElementById('vinylDisc');
+        const vinylCenter = document.getElementById('vinylCenter');
+
+        audio.volume = 0.40;
+        let indiceActual = -1; 
+
+        const listaCanciones = [
+            { archivo: "AUDIO/ambient.m4a", texto: "#3 - Aphex Twin", portada: "https://www.normanrecords.com/artwork/medium/180/203930.jpg" },
+            { archivo: "AUDIO/ambient2.opus", texto: "Village of Dali - Final Fantasy IX", portada: "https://i.scdn.co/image/ab67616d0000b27373fdbf8281a526452f942410" },
+            { archivo: "AUDIO/ambient3.m4a", texto: "BÓ - Ralphie Choo", portada: "https://crazyminds.es/wp-content/uploads/Ralphie-Choo-Supernova-scaled.webp" },
+            { archivo: "AUDIO/ambient4.MP3", texto: "#2 - takoro", portada: "MULTIMEDIA/2.jpeg" },
+            { archivo: "AUDIO/ambient5.m4a", texto: "Forest - Akira Yamaoka", portada: "https://m.media-amazon.com/images/I/716TcK+znIL._UF1000,1000_QL80_.jpg"},
+            { archivo: "AUDIO/ambient6.opus", texto: "URL湖 - Webinar", portada: "https://i.discogs.com/9AGHDk2o7FJZQaFsZPBBa_PyGhrSvPe03ign1XG-Hvg/rs:fit/g:sm/q:40/h:300/w:300/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTIzNjMx/NTgxLTE2NTU2ODEx/MTMtNzcy1OSG5qcGVn.jpeg" },
+            { archivo: "AUDIO/ambient7.m4a", texto: "Online Office -  猫 シ Corp", portada: "https://i.scdn.co/image/ab67616d00001e024880719165366e4a9a041692" },
+            { archivo: "AUDIO/ambient8.m4a", texto: "Bonus fruit || - DreamCorp", portada: "https://i.discogs.com/9AGHDk2o7FJZQaFsZPBBa_PyGhrSvPe03ign1XG-Hvg/rs:fit/g:sm/q:40/h:300/w:300/czM6Ly9kaXNjb2dz/LWRhdGFiYXNlLWlt/YWdlcy9SLTIzNjMx/NTgxLTE2NTU2ODEx/MTMtNzcy1OSG5qcGVn.jpeg" },
+            { archivo: "AUDIO/ambient9.m4a", texto: "Xtal - Aphex Twin", portada: "https://upload.wikimedia.org/wikipedia/en/thumb/4/40/Aphex_Twin_logo.svg/3840px-Aphex_Twin_logo.svg.png" }
+        ];
+
+        function cargarCancion(index) {
+            indiceActual = index;
+            const cancion = listaCanciones[indiceActual];
+            audio.src = cancion.archivo;
+            playerTrackInfo.innerText = cancion.texto;
+
+            if (cancion.portada && cancion.portada.trim() !== "") {
+                vinylCenter.style.backgroundImage = `url('${cancion.portada}')`;
+                vinylCenter.classList.add('has-cover');
+            } else {
+                vinylCenter.style.backgroundImage = 'none';
+                vinylCenter.classList.remove('has-cover');
+            }
+        }
+
+        function playAudio() {
+            audio.play().then(() => {
+                vinylDisc.classList.add('spinning');
+                btnPlayPause.innerText = "⏸";
+            }).catch(err => {
+                console.error("Interacción requerida:", err);
+                reproducirRandom(); 
+            });
+        }
+
+        function pausaAudio() {
+            audio.pause();
+            vinylDisc.classList.remove('spinning');
+            btnPlayPause.innerText = "▶";
+        }
+
+        function togglePlayPause() {
+            if (audio.paused) {
+                if (indiceActual === -1) reproducirRandom(); else playAudio();
+            } else {
+                pausaAudio();
+            }
+        }
+
+        function reproducirRandom() {
+            if (listaCanciones.length <= 1) {
+                cargarCancion(0);
+            } else {
+                let nuevoIndice;
+                do {
+                    nuevoIndice = Math.floor(Math.random() * listaCanciones.length);
+                } while (nuevoIndice === indiceActual);
+                
+                cargarCancion(nuevoIndice);
+            }
+            playAudio();
+        }
+
+        function reproducirAnterior() {
+            if (indiceActual > 0) {
+                cargarCancion(indiceActual - 1);
+            } else {
+                cargarCancion(listaCanciones.length - 1);
+            }
+            playAudio();
+        }
+
+        btnPlayPause.addEventListener('click', togglePlayPause);
+        btnNext.addEventListener('click', reproducirRandom);
+        btnPrev.addEventListener('click', reproducirAnterior);
+        audio.addEventListener('ended', reproducirRandom);
+
+        volumeSlider.addEventListener('input', (e) => {
+            audio.volume = e.target.value;
+            if(audio.muted && e.target.value > 0) {
+                audio.muted = false;
+                muteToggle.innerText = "Mutear";
+                muteToggle.classList.remove('active');
+            }
+        });
+
+        muteToggle.addEventListener('click', () => {
+            audio.muted = !audio.muted;
+            if (audio.muted) {
+                muteToggle.innerText = "Desmutear";
+                muteToggle.classList.add('active');
+            } else {
+                muteToggle.innerText = "Mutear";
+                muteToggle.classList.remove('active');
+            }
+        });
+
+        // TRADUCTOR NATIVO DE ALTO RENDIMIENTO (Mantiene las etiquetas HTML intactas)
+        const btnLanguage = document.getElementById('btnLanguage');
+        btnLanguage.addEventListener('click', () => {
+            const currentLang = btnLanguage.getAttribute('data-lang');
+            const targetLang = currentLang === 'es' ? 'en' : 'es';
+            
+            document.querySelectorAll('.log-content p').forEach(p => {
+                const enText = p.getAttribute('data-en');
+                if (enText) {
+                    const currentText = p.innerHTML;
+                    p.setAttribute('data-en', currentText);
+                    p.innerHTML = enText;
+                }
+            });
+            
+            btnLanguage.setAttribute('data-lang', targetLang);
+            btnLanguage.querySelector('.lang-label').innerText = targetLang.toUpperCase();
+            
+            // Volver a enlazar eventos multimedia si las etiquetas cambiaron
+            initMediaEvents();
+        });
+
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+        function openSidebar() {
+            sidebar.classList.add('open');
+            sidebarOverlay.classList.add('show');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('open');
+            sidebarOverlay.classList.remove('show');
+        }
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (sidebar.classList.contains('open')) closeSidebar(); else openSidebar();
+        });
+
+        sidebarOverlay.addEventListener('click', closeSidebar);
+
+        const themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeToggle.classList.toggle('active');
+        });
+
+        const layoutSizeToggle = document.getElementById('layoutSizeToggle');
+        layoutSizeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('large-interface');
+            layoutSizeToggle.classList.toggle('active');
+            layoutSizeToggle.innerText = document.body.classList.contains('large-interface') ? "Ventana Normal" : "Agrandar Ventana";
+        });
+
+        const fontSizeToggle = document.getElementById('fontSizeToggle');
+        fontSizeToggle.addEventListener('click', () => {
+            const currentSize = getComputedStyle(document.documentElement).getPropertyValue('--font-size-base').trim();
+            if(currentSize === '1.1rem' || currentSize === '1.25rem') {
+                document.documentElement.style.setProperty('--font-size-base', '1.35rem');
+                fontSizeToggle.innerText = "Texto Normal";
+                fontSizeToggle.classList.add('active');
+            } else {
+                document.documentElement.style.setProperty('--font-size-base', document.body.classList.contains('large-interface') ? '1.25rem' : '1.1rem');
+                fontSizeToggle.innerText = "Texto Grande";
+                fontSizeToggle.classList.remove('active');
+            }
+        });
+
+        const motionToggle = document.getElementById('motionToggle');
+        motionToggle.addEventListener('click', () => {
+            document.body.classList.toggle('reduced-motion');
+            motionToggle.classList.toggle('active');
+            motionToggle.innerText = document.body.classList.contains('reduced-motion') ? "Animaciones: OFF" : "Reducir Animaciones";
+        });
+
+        function updateClock() {
+            const now = new Date();
+            const dateOptions = { day: 'numeric', month: 'short', year: 'numeric' };
+            const dateString = now.toLocaleDateString('es-ES', dateOptions).toUpperCase();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('live-clock').innerText = `${dateString} — ${hours}:${minutes}:${seconds}`;
+        }
+        updateClock();
+        setInterval(updateClock, 1000);
+
+        document.querySelectorAll('.log-date').forEach(button => {
+            button.addEventListener('click', () => {
+                button.parentElement.classList.toggle('active');
+            });
+        });
+
+        const previewContainer = document.getElementById('media-preview-container');
+        const mediaLightbox = document.getElementById('media-lightbox');
+        const lightboxContent = document.getElementById('lightboxContent');
+
+        function initMediaEvents() {
+            document.querySelectorAll('.wiki-link').forEach(link => {
+                const src = link.getAttribute('data-src');
+                const type = link.getAttribute('data-type') || 'image';
+
+                // Clonar para evitar acumulación de eventos repetidos al cambiar idioma
+                const newLink = link.cloneNode(true);
+                link.parentNode.replaceChild(newLink, link);
+
+                newLink.addEventListener('mouseenter', (e) => {
+                    if (!src) return;
+                    previewContainer.innerHTML = '';
+                    if (type === 'video' || src.endsWith('.mp4')) {
+                        const videoEl = document.createElement('video');
+                        videoEl.src = src; videoEl.autoplay = true; videoEl.loop = true; videoEl.muted = true;
+                        previewContainer.appendChild(videoEl);
+                    } else {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = src;
+                        previewContainer.appendChild(imgEl);
+                    }
+                    previewContainer.style.display = 'block';
+                });
+
+                newLink.addEventListener('mousemove', (e) => {
+                    previewContainer.style.left = (e.clientX + 15) + 'px';
+                    previewContainer.style.top = (e.clientY + 15) + 'px';
+                });
+
+                newLink.addEventListener('mouseleave', () => {
+                    previewContainer.style.display = 'none';
+                    previewContainer.innerHTML = '';
+                });
+
+                newLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    if (!src) return;
+                    lightboxContent.innerHTML = '';
+                    previewContainer.style.display = 'none'; 
+
+                    if (type === 'video' || src.endsWith('.mp4')) {
+                        const videoEl = document.createElement('video');
+                        videoEl.src = src; videoEl.controls = true; videoEl.autoplay = true; videoEl.loop = true;
+                        lightboxContent.appendChild(videoEl);
+                    } else {
+                        const imgEl = document.createElement('img');
+                        imgEl.src = src;
+                        lightboxContent.appendChild(imgEl);
+                    }
+                    mediaLightbox.style.display = 'flex';
+                });
+            });
+        }
+        initMediaEvents();
+
+        document.getElementById('macAppIcon').addEventListener('click', () => {
+            lightboxContent.innerHTML = '';
+            const imgEl = document.createElement('img');
+            imgEl.src = 'MULTIMEDIA/icon.gif';
+            lightboxContent.appendChild(imgEl);
+            mediaLightbox.style.display = 'flex';
+        });
+
+        mediaLightbox.addEventListener('click', () => {
+            mediaLightbox.style.display = 'none';
+        });
+
+        const macWindow = document.getElementById('macWindow');
+        const reopenBtn = document.getElementById('reopen-btn');
+
+        document.getElementById('macCloseBtn').addEventListener('click', () => {
+            macWindow.classList.add('closed');
+            reopenBtn.innerText = "[ABRIR ARCHIVO]";
+            reopenBtn.style.display = 'block';
+        });
+
+        document.getElementById('macMinimizeBtn').addEventListener('click', () => {
+            macWindow.classList.add('minimized');
+            setTimeout(() => {
+                if (macWindow.classList.contains('minimized')) {
+                    macWindow.style.display = 'none';
+                    reopenBtn.innerText = "[RESTAURAR VENTANA]";
+                    reopenBtn.style.display = 'block';
+                }
+            }, 400);
+        });
+
+        reopenBtn.addEventListener('click', () => {
+            if (macWindow.classList.contains('closed')) {
+                macWindow.classList.remove('closed');
+            } else if (macWindow.classList.contains('minimized')) {
+                macWindow.style.display = 'block';
+                void macWindow.offsetHeight; 
+                macWindow.classList.remove('minimized');
+            }
+            reopenBtn.style.display = 'none';
+        });
+        
+        const btnFullscreen = document.getElementById('btnFullscreen');
+        const maxBtn = document.getElementById('macMaximizeBtn');
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.getElementById('macWindow').requestFullscreen().catch(err => {
+                    console.warn(`Fullscreen bloqueado: ${err.message}`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        btnFullscreen.addEventListener('click', toggleFullscreen);
+        maxBtn.addEventListener('click', toggleFullscreen);
+    </script>
+</body>
+</html>

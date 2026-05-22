@@ -1,0 +1,677 @@
+/* ==========================================================================
+   VARIABLES Y CAPA DE ACCESIBILIDAD 
+   ========================================================================== */
+:root {
+    --bg-color: #f4f4f4;
+    --window-bg: #ffffff;
+    --text-color: #111111;
+    --border-color: #111111;
+    --accent-color: #555555;
+    --font-size-base: 1.1rem;
+    --line-height-base: 1.6;
+    --letter-spacing-base: 0px;
+    --text-align-base: left;
+    --transition-speed: 0.28s;
+    --transition-curve: cubic-bezier(0.25, 1, 0.5, 1);
+    
+    --mac-close: #ff5f56;
+    --mac-minimize: #ffbd2e;
+    --mac-maximize: #27c93f;
+}
+
+body.dark-mode {
+    --bg-color: #0b0b0b;
+    --window-bg: #111111;
+    --text-color: #eeeeee;
+    --border-color: #eeeeee;
+    --accent-color: #aaaaaa;
+}
+
+body.large-interface {
+    --font-size-base: 1.25rem;
+}
+
+body.reduced-motion * {
+    transition: none !important;
+    animation: none !important;
+}
+
+/* ==========================================================================
+   ESTRUCTURA BASE Y PREVENCIÓN DE VÍNCULOS
+   ========================================================================== */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: "Times New Roman", Times, serif;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-base);
+    letter-spacing: var(--letter-spacing-base);
+    text-align: var(--text-align-base);
+    transition: background-color var(--transition-speed) var(--transition-curve), color var(--transition-speed) var(--transition-curve);
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
+
+a, a:link, a:visited, a:hover, a:active, .log-content a, .log-content a:visited {
+    color: var(--text-color) !important;
+    text-decoration: underline !important;
+    font-weight: bold !important;
+}
+a:hover {
+    color: var(--accent-color) !important;
+}
+
+/* ==========================================================================
+   SIDEBAR DE ACCESIBILIDAD LATERAL
+   ========================================================================== */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -340px;
+    width: 340px;
+    height: 100%;
+    background: var(--window-bg);
+    border-right: 2px solid var(--border-color);
+    z-index: 5000;
+    transition: left var(--transition-speed) var(--transition-curve), background-color var(--transition-speed) var(--transition-curve);
+    padding: 40px 30px;
+    box-sizing: border-box;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 35px;
+}
+.sidebar.open {
+    left: 0;
+}
+.sidebar h2 {
+    font-size: 1.1rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(1px);
+    z-index: 4999;
+    display: none;
+}
+.sidebar-overlay.show {
+    display: block;
+}
+
+.control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.control-label {
+    display: block;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+    color: var(--accent-color);
+}
+.volume-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 2px;
+    background: var(--border-color);
+    outline: none;
+    margin-top: 5px;
+}
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 10px;
+    background: var(--text-color);
+    cursor: pointer;
+    border-radius: 50%;
+}
+.btn-option {
+    width: 100%;
+    padding: 8px 12px;
+    background: var(--window-bg);
+    border: 1.5px solid var(--border-color);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-align: left;
+    transition: background-color 0.2s, color 0.2s;
+}
+.btn-option:hover, .btn-option.active {
+    background-color: var(--text-color);
+    color: var(--bg-color);
+}
+
+/* ==========================================================================
+   VENTANA MAC OS Y EFECTO GLOW EN BOTONES
+   ========================================================================== */
+.mac-window {
+    width: 100%;
+    max-width: 820px;
+    margin: 40px auto;
+    background: var(--window-bg);
+    border: 2px solid var(--border-color);
+    box-shadow: 6px 6px 0 var(--border-color);
+    position: relative;
+    overflow: hidden;
+    transition: background-color var(--transition-speed) var(--transition-curve), 
+                border-color var(--transition-speed) var(--transition-curve), 
+                transform 0.4s cubic-bezier(0.25, 1, 0.5, 1), 
+                opacity 0.4s ease;
+}
+
+.mac-window.minimized {
+    transform: translateY(100vh) scale(0.7);
+    opacity: 0;
+}
+.mac-window.closed {
+    display: none !important;
+}
+
+.mac-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    height: 45px;
+    border-bottom: 2px solid var(--border-color);
+    background: var(--window-bg);
+    user-select: none;
+    position: relative;
+}
+.mac-buttons {
+    display: flex;
+    gap: 8px;
+    z-index: 10;
+}
+
+.mac-dot {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    border: 1.5px solid var(--border-color);
+    cursor: pointer;
+    position: relative;
+    transition: box-shadow 0.25s ease, filter 0.2s ease, transform 0.2s ease;
+}
+.mac-dot.close { background-color: var(--mac-close) !important; }
+.mac-dot.minimize { background-color: var(--mac-minimize) !important; }
+.mac-dot.maximize { background-color: var(--mac-maximize) !important; }
+
+.mac-dot.close:hover {
+    box-shadow: 0 0 12px var(--mac-close), inset 0 0 4px rgba(255,255,255,0.6);
+    transform: scale(1.05);
+}
+.mac-dot.minimize:hover {
+    box-shadow: 0 0 12px var(--mac-minimize), inset 0 0 4px rgba(255,255,255,0.6);
+    transform: scale(1.05);
+}
+.mac-dot.maximize:hover {
+    box-shadow: 0 0 12px var(--mac-maximize), inset 0 0 4px rgba(255,255,255,0.6);
+    transform: scale(1.05);
+}
+
+.mac-title-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.mac-app-icon {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    cursor: pointer;
+}
+.mac-title {
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent-color);
+}
+
+.window-content {
+    padding: 40px 30px;
+}
+
+/* ==========================================================================
+   REPRODUCTOR INTEGRADO
+   ========================================================================== */
+header {
+    margin-bottom: 40px;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+}
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+.menu-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 22px;
+    height: 12px;
+}
+.menu-toggle span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-color);
+}
+header h1 {
+    font-size: 1.3rem;
+    font-weight: normal;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin: 0;
+}
+
+.integrated-player {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(0, 0, 0, 0.03);
+    border: 1.5px solid var(--border-color);
+    padding: 6px 14px;
+    box-sizing: border-box;
+    width: 280px;
+}
+body.dark-mode .integrated-player {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.player-disc-area {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mini-vinyl {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #222 20%, #111 21%, #222 30%, #050505 40%, #1a1a1a 55%, #000 70%);
+    border: 1.5px solid var(--border-color);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+
+.mini-vinyl::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: linear-gradient(45deg, transparent 35%, rgba(255,255,255,0.15) 50%, transparent 65%);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.vinyl-lines {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px dashed rgba(255, 255, 255, 0.06);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.vinyl-center {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--window-bg);
+    border: 1px solid var(--border-color);
+    z-index: 5;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 0.2s ease;
+    position: relative;
+}
+
+.vinyl-center.has-cover::after {
+    content: "";
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: var(--window-bg);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 0.5px solid var(--border-color);
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.mini-vinyl.spinning {
+    animation: spin 3s linear infinite;
+}
+
+.player-core {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.player-track-title {
+    font-size: 0.72rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.5px;
+    color: var(--text-color);
+    margin-bottom: 4px;
+}
+.player-controls-row {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+.btn-player-ctrl {
+    background: none;
+    border: none;
+    font-size: 0.82rem;
+    cursor: pointer;
+    color: var(--text-color);
+    padding: 2px;
+    transition: transform 0.1s ease;
+}
+.btn-player-ctrl:hover {
+    transform: scale(1.15);
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+/* BOTÓN DE IDIOMA EN LA ESQUINA SUPERIOR DERECHA CON EL ICONO NATIVO */
+.mac-menu-btn {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 4px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    text-transform: uppercase;
+    transition: background-color 0.15s, color 0.15s;
+}
+.mac-menu-btn:hover {
+    background-color: var(--text-color);
+    color: var(--window-bg);
+}
+.mac-btn-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.standalone-fullscreen {
+    background: none;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    font-family: inherit;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+}
+.standalone-fullscreen:hover {
+    background-color: var(--text-color);
+    color: var(--window-bg);
+}
+
+#live-clock {
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* ==========================================================================
+   BITÁCORA, LOGS Y COMPLEMENTOS MULTIMEDIA
+   ========================================================================== */
+.logs-container {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.log-entry {
+    border-bottom: 1px solid var(--border-color);
+}
+.log-date {
+    width: 100%;
+    text-align: left;
+    padding: 20px 0;
+    background: none;
+    border: none;
+    font-family: inherit;
+    font-size: 1.15rem;
+    color: var(--text-color);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.log-date::after {
+    content: "[+]";
+    font-size: 0.9rem;
+    color: var(--accent-color);
+}
+.log-entry.active .log-date::after {
+    content: "[-]";
+}
+.log-content {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: max-height 0.4s var(--transition-curve), opacity 0.35s ease, transform 0.35s ease;
+    text-align: justify;
+}
+.log-entry.active .log-content {
+    max-height: 3000px;
+    padding-bottom: 35px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ESTILOS DE LOS LINKS DE IMÁGENES FLOTANTES RESTAURADOS */
+.wiki-link, .wiki-link strong, .wiki-link u {
+    font-weight: bold !important;
+    color: var(--text-color) !important;
+    text-decoration: underline !important;
+    cursor: pointer;
+}
+.wiki-link {
+    background-color: rgba(0,0,0,0.04);
+    padding: 0 4px;
+}
+body.dark-mode .wiki-link {
+    background-color: rgba(255,255,255,0.06);
+}
+
+#reopen-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--window-bg);
+    border: 1.5px solid var(--text-color);
+    color: var(--text-color);
+    padding: 10px 16px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+    display: none;
+    z-index: 99999; 
+    box-shadow: 3px 3px 0 var(--border-color);
+    transition: transform 0.1s ease;
+}
+#reopen-btn:hover {
+    transform: scale(1.05);
+}
+
+.instagram-fixed-btn {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    text-decoration: none;
+    z-index: 4000;
+}
+
+#media-preview-container {
+    position: fixed;
+    display: none;
+    width: 200px;
+    max-height: 200px;
+    border: 2px solid var(--border-color);
+    background: var(--window-bg);
+    z-index: 10000;
+    pointer-events: none;
+    box-shadow: 4px 4px 0 var(--border-color);
+}
+#media-preview-container img, #media-preview-container video { width: 100%; height: 100%; object-fit: cover; }
+#media-lightbox {
+    position: fixed;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 20000;
+}
+.lightbox-content img, .lightbox-content video { max-width: 90%; max-height: 90vh; border: 3px solid #fff; }
+
+/* ==========================================================================
+   DISEÑO MÓVIL RESPONSIVO
+   ========================================================================== */
+@media (max-width: 768px) {
+    body { 
+        padding: 12px; 
+        font-size: 15px; 
+    }
+    .mac-window { 
+        margin: 0; 
+        box-shadow: none; 
+        border: 1px solid var(--border-color);
+    }
+    .window-content {
+        padding: 20px 15px;
+    }
+    
+    header { 
+        flex-direction: column; 
+        align-items: flex-start; 
+        gap: 16px; 
+        padding-bottom: 22px;
+    }
+    
+    .header-left { 
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center; 
+        width: 100%; 
+        gap: 12px; 
+    }
+    
+    .integrated-player { 
+        display: flex;
+        width: 100%; 
+        max-width: 100%;
+        margin-top: 5px;
+        padding: 8px 12px;
+    }
+    
+    .header-right {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-top: 1px dashed var(--border-color);
+        padding-top: 12px;
+    }
+    
+    .standalone-fullscreen {
+        font-size: 0.7rem;
+        padding: 6px 10px;
+    }
+    
+    #live-clock {
+        font-size: 0.85rem;
+    }
+    
+    .log-date {
+        font-size: 1.05rem;
+        padding: 22px 0;
+    }
+    
+    .sidebar { 
+        width: 290px; 
+    }
+    
+    .instagram-fixed-btn {
+        position: relative;
+        display: block;
+        margin: 30px 0 10px 0;
+        left: 0;
+        bottom: 0;
+        text-align: center;
+    }
+}
